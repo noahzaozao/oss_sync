@@ -108,7 +108,7 @@ func main() {
 			serverFileMd5String := h.Get("content-md5")
 
 			fmt.Println(clientFileMd5String + "  " + serverFileMd5String + "  " + file)
-			
+
 			if clientFileMd5String == serverFileMd5String {
 				fmt.Println(clientFileMd5String + "  " + file + " skipped")
 				continue
@@ -116,7 +116,7 @@ func main() {
 		}
 
 		options := []oss.Option{
-			oss.Meta("content-md5", clientFileMd5String),
+			oss.ContentMD5(clientFileMd5String),
 		}
 		err = bucket.PutObjectFromFile(objectKey, file, options...)
 		if err != nil {
