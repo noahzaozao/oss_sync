@@ -8,7 +8,13 @@ go get install github.com/noahzaozao/oss_sync
 
 ## Usage
 
-oss_sync -n micro_service_name
+#### Upload
+
+oss_sync -n sub_path_name -m up
+
+#### Download
+
+oss_sync -n sub_path_name -m down
 
 ### config.yaml
 
