@@ -62,7 +62,7 @@ func main() {
 		return
 	}
 
-	err := config.LoadFile("./config.yaml")
+	err := config.LoadFile("./sync_config.yaml")
 	if err != nil {
 		fmt.Println(err.Error())
 	}

@@ -1,10 +1,8 @@
 # oss_sync
 
-## Install
+## Installation
 
 go get -v -u github.com/noahzaozao/oss_sync
-
-go get install github.com/noahzaozao/oss_sync
 
 ## Usage
 
@@ -16,7 +14,7 @@ oss_sync -n sub_path_name -m up
 
 oss_sync -n sub_path_name -m down
 
-### config.yaml
+### sync_config.yaml
 
 config:
 
