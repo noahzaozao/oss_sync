@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/micro/go-config"
 	"os"
 	"path/filepath"
 	"strings"
-	"github.com/micro/go-config"
 )
 
 func walk_dir(dirPth, suffix string) (files []string, err error) {
@@ -46,9 +46,16 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
-	config.LoadFile("./config.yaml")
+	err = config.LoadFile("./config.yaml")
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
 	var bucketConfig BucketConfig
-	config.Get("config").Scan(&bucketConfig)
+	err = config.Get("config").Scan(&bucketConfig)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	client, err := oss.New(
 		bucketConfig.ENDPOINT,
@@ -58,6 +65,7 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
+	//_, err = client.Bucket(bucketConfig.BUCKET_NAME)
 	bucket, err := client.Bucket(bucketConfig.BUCKET_NAME)
 	if err != nil {
 		fmt.Println(err.Error())
