@@ -1,7 +1,8 @@
 package main
 
 import (
-	"encoding/hex"
+	"crypto/md5"
+	"encoding/base64"
 	"flag"
 	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
@@ -10,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"crypto/md5"
 )
 
 func walk_dir(dirPth, suffix string) (files []string, err error) {
@@ -39,12 +39,14 @@ type BucketConfig struct {
 	BUCKET_NAME string `json:"BUCKET_NAME"`
 }
 
-func md5SumFile(file string) (value [md5.Size]byte, err error) {
+func md5SumFile(file string) (value []byte, err error) {
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return
 	}
-	value = md5.Sum(data)
+	m := md5.New()
+	m.Write(data)
+	value = m.Sum(nil)
 	return value, nil
 }
 
@@ -93,7 +95,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		clientFileMd5String := hex.EncodeToString(fileMd5[:])
+		clientFileMd5String := base64.StdEncoding.EncodeToString(fileMd5)
 
 		b, err := bucket.IsObjectExist(objectKey)
 		if err != nil {
