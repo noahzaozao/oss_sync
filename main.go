@@ -95,8 +95,6 @@ func main() {
 		}
 		clientFileMd5String := hex.EncodeToString(fileMd5[:])
 
-		fmt.Println(clientFileMd5String + "     " + file + " >>> " + objectKey)
-
 		b, err := bucket.IsObjectExist(objectKey)
 		if err != nil {
 			fmt.Println(err.Error())
@@ -110,6 +108,7 @@ func main() {
 			serverFileMd5String := h.Get("Content-MD5")
 
 			if clientFileMd5String == serverFileMd5String {
+				fmt.Println(clientFileMd5String + "  " + file + " skipped")
 				continue
 			}
 		}
@@ -121,6 +120,8 @@ func main() {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
+
+		fmt.Println(clientFileMd5String + "  " + file + " >>> " + objectKey + " successful")
 	}
 
 }
