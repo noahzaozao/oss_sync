@@ -1,0 +1,5 @@
+config:
+  ENDPOINT: "http://oss-cn-shanghai-internal.aliyuncs.com"
+  ACCESS_KEY_ID: ""
+  ACCESS_KEY_SECRET: ""
+  BUCKET_NAME: ""
