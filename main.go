@@ -9,6 +9,7 @@ import (
 	"github.com/micro/go-config"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -52,15 +53,16 @@ func md5SumFile(file string) (value []byte, err error) {
 
 func main() {
 
-	name := flag.String("n", "", "micro service name")
+	sub_path_name := flag.String("n", "", "sub path name")
+	mode := flag.String("m", "", "upload or download")
 	flag.Parse()
 
-	files, err := walk_dir("./vendor", "")
-	if err != nil {
-		fmt.Println(err.Error())
+	if *mode != "up" && *mode != "down" && *mode != "upload" && *mode != "download" {
+		fmt.Println("mode is necessary! use -m up or -m down")
+		return
 	}
 
-	err = config.LoadFile("./config.yaml")
+	err := config.LoadFile("./config.yaml")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -85,47 +87,105 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
-	var objectKey = ""
-	for _, file := range files {
-		if *name != "" {
-			objectKey = *name + "/" + file
-		}
-
-		fileMd5, err := md5SumFile(file)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		clientFileMd5String := base64.StdEncoding.EncodeToString(fileMd5)
-
-		b, err := bucket.IsObjectExist(objectKey)
+	if *mode == "up" || *mode == "upload" {
+		files, err := walk_dir("./vendor", "")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
 
-		if b {
-			h, err := bucket.GetObjectDetailedMeta(objectKey)
+		var objectKey = ""
+		for _, file := range files {
+			if *sub_path_name != "" {
+				objectKey = *sub_path_name + "/" + file
+			}
+
+			fileMd5, err := md5SumFile(file)
 			if err != nil {
 				fmt.Println(err.Error())
 			}
-			serverFileMd5String := h.Get("content-md5")
+			clientFileMd5String := base64.StdEncoding.EncodeToString(fileMd5)
 
-			fmt.Println(clientFileMd5String + "  " + serverFileMd5String + "  " + file)
-
-			if clientFileMd5String == serverFileMd5String {
-				fmt.Println(clientFileMd5String + "  " + file + " skipped")
-				continue
+			b, err := bucket.IsObjectExist(objectKey)
+			if err != nil {
+				fmt.Println(err.Error())
 			}
-		}
 
-		options := []oss.Option{
-			oss.ContentMD5(clientFileMd5String),
-		}
-		err = bucket.PutObjectFromFile(objectKey, file, options...)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
+			if b {
+				h, err := bucket.GetObjectDetailedMeta(objectKey)
+				if err != nil {
+					fmt.Println(err.Error())
+				}
+				serverFileMd5String := h.Get("content-md5")
 
-		fmt.Println(clientFileMd5String + "  " + file + " >>> " + objectKey + " successful")
+				fmt.Println(clientFileMd5String + "  " + serverFileMd5String + "  " + file)
+
+				if clientFileMd5String == serverFileMd5String {
+					fmt.Println(clientFileMd5String + "  " + file + " skipped")
+					continue
+				}
+			}
+
+			options := []oss.Option{
+				oss.ContentMD5(clientFileMd5String),
+			}
+			err = bucket.PutObjectFromFile(objectKey, file, options...)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			fmt.Println(clientFileMd5String + "  " + file + " >>> " + objectKey + " successful")
+		}
 	}
 
+	if *mode == "down" || *mode == "download" {
+		marker := *sub_path_name
+		for {
+			lsRes, err := bucket.ListObjects(oss.Marker(marker))
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			for _, object := range lsRes.Objects {
+				filePath := path.Dir(object.Key)
+				err = os.MkdirAll(filePath, os.ModePerm)
+				if err != nil {
+					fmt.Println(err.Error())
+				}
+
+				if _, err := os.Stat(object.Key); err == nil {
+					fileMd5, err := md5SumFile(object.Key)
+					if err != nil {
+						fmt.Println(err.Error())
+					}
+					clientFileMd5String := base64.StdEncoding.EncodeToString(fileMd5)
+
+					h, err := bucket.GetObjectDetailedMeta(object.Key)
+					if err != nil {
+						fmt.Println(err.Error())
+					}
+					serverFileMd5String := h.Get("content-md5")
+
+					fmt.Println(clientFileMd5String + "  " + serverFileMd5String + "  " + object.Key)
+
+					if clientFileMd5String == serverFileMd5String {
+						fmt.Println(clientFileMd5String + "  " + object.Key + " skipped")
+						continue
+					}
+				}
+
+				err = bucket.GetObjectToFile(object.Key, object.Key)
+				if err != nil {
+					fmt.Println(err.Error())
+				}
+
+				fmt.Println(" >>> " + object.Key + " successful")
+			}
+
+			if lsRes.IsTruncated {
+				marker = lsRes.NextMarker
+			} else {
+				break
+			}
+		}
+	}
 }
