@@ -1,0 +1,8 @@
+package: oss_sync
+import:
+- package: github.com/aliyun/aliyun-oss-go-sdk
+  version: ^1.9.4
+  subpackages:
+  - oss
+- package: github.com/micro/go-config
+  version: ^0.14.0

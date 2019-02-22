@@ -1,0 +1,50 @@
+hash: 8e639d726d1af11299f7267eaad73a2df684cd88f5fb1350c5ee0fe082473583
+updated: 2019-02-22T22:02:43.505082641+08:00
+imports:
+- name: github.com/aliyun/aliyun-oss-go-sdk
+  version: 2b29687e15f2cc71fb3a50f28be1d6d30c40c86a
+  subpackages:
+  - oss
+- name: github.com/bitly/go-simplejson
+  version: 9db4a59bd4d803ae0c173a7d8a538e056cd59d57
+- name: github.com/BurntSushi/toml
+  version: 3012a1dbe2e4bd1391d42b32f0577cb7bbc7f005
+- name: github.com/fsnotify/fsnotify
+  version: ccc981bf80385c528a65fbfdd49bf2d8da22aa23
+- name: github.com/ghodss/yaml
+  version: 25d852aebe32c875e9c044af3eef9c7dc6bc777f
+- name: github.com/hashicorp/hcl
+  version: 65a6292f0157eff210d03ed1bf6c59b190b8b906
+  subpackages:
+  - hcl/ast
+  - hcl/parser
+  - hcl/scanner
+  - hcl/strconv
+  - hcl/token
+  - json/parser
+  - json/scanner
+  - json/token
+- name: github.com/imdario/mergo
+  version: 7c29201646fa3de8506f701213473dd407f19646
+- name: github.com/micro/go-config
+  version: 2a4da1fca4d75c5e1fb254a60b4aa987c73fab08
+  subpackages:
+  - encoder
+  - encoder/hcl
+  - encoder/json
+  - encoder/toml
+  - encoder/xml
+  - encoder/yaml
+  - loader
+  - loader/memory
+  - reader
+  - reader/json
+  - source
+  - source/file
+- name: golang.org/x/sys
+  version: a9d3bda3a223baa6bba6ef412cb273f0fd163c05
+  subpackages:
+  - unix
+- name: gopkg.in/yaml.v2
+  version: 51d6538a90f86fe93ac480b35f37b2be17fef232
+testImports: []
