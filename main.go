@@ -77,7 +77,7 @@ func main() {
 			fileName = *name + "/" + file
 		}
 		fmt.Println(file + " >>> " + fileName)
-		err = bucket.PutObjectFromFile(*name + file, file)
+		err = bucket.PutObjectFromFile(fileName, file)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
