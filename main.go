@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	"github.com/noahzaozao/oss_sync/osssync"
+	"os"
 )
 
 func main() {
