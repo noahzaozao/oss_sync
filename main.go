@@ -19,7 +19,7 @@ func main() {
 		return
 	}
 
-	if _, err := os.Stat("./sync_config.yaml"); err == nil {
+	if _, err := os.Stat("./sync_config.yaml"); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
