@@ -1,4 +1,4 @@
-package: oss_sync
+package: github.com/noahzaozao/oss_sync
 import:
 - package: github.com/aliyun/aliyun-oss-go-sdk
   version: ^1.9.4

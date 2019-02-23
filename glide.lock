@@ -1,5 +1,5 @@
-hash: 8e639d726d1af11299f7267eaad73a2df684cd88f5fb1350c5ee0fe082473583
-updated: 2019-02-22T22:02:43.505082641+08:00
+hash: 83dedc81ba0e24d80d57774a426cd0971fe5e2281aa22c3bfa93903e8c226838
+updated: 2019-02-23T11:41:07.295479883+08:00
 imports:
 - name: github.com/aliyun/aliyun-oss-go-sdk
   version: 2b29687e15f2cc71fb3a50f28be1d6d30c40c86a
@@ -42,7 +42,7 @@ imports:
   - source
   - source/file
 - name: golang.org/x/sys
-  version: a9d3bda3a223baa6bba6ef412cb273f0fd163c05
+  version: cd391775e71e684db52b63df9affd58269495083
   subpackages:
   - unix
 - name: gopkg.in/yaml.v2
