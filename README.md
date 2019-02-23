@@ -8,11 +8,11 @@ go get -v -u github.com/noahzaozao/oss_sync
 
 #### Upload
 
-oss_sync -n sub_path_name -m up
+oss_sync -n sub_path_name/sub_path -m up
 
 #### Download
 
-oss_sync -n sub_path_name -m down
+oss_sync -n sub_path_name/sub_path -m down
 
 ### sync_config.yaml
 
