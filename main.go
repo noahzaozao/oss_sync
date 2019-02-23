@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"oss_sync/osssync"
+	"github.com/noahzaozao/oss_sync/osssync"
 )
 
 func main() {
