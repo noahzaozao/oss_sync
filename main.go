@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"oss_sync/osssync"
 )
 
 func main() {
@@ -28,13 +29,8 @@ func main() {
 		return
 	}
 
-	bucketConfig := new(BucketConfig)
-	if err := bucketConfig.Load("./sync_config.yaml"); err != nil {
-		fmt.Println(err.Error())
-	}
-
-	ossClient := new(OSSClient)
-	if err := ossClient.Init(bucketConfig); err != nil {
+	ossClient := new(osssync.OSSClient)
+	if err := ossClient.Init("./sync_config.yaml"); err != nil {
 		fmt.Println(err.Error())
 	}
 

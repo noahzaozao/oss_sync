@@ -1,4 +1,4 @@
-package main
+package osssync
 
 import (
 	"crypto/md5"
@@ -13,13 +13,17 @@ import (
 )
 
 type OSSClient struct {
-	config *BucketConfig
+	config *OSSConfig
 	client *oss.Client
 	Bucket *oss.Bucket
 }
 
-func (c *OSSClient) Init(config *BucketConfig) error {
-	c.config = config
+func (c *OSSClient) Init(path string) error {
+	bucketConfig := new(OSSConfig)
+	if err := bucketConfig.Load(path); err != nil {
+		return err
+	}
+	c.config = bucketConfig
 	client, err := oss.New(
 		c.config.ENDPOINT,
 		c.config.ACCESS_KEY_ID,
